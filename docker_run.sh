@@ -8,6 +8,7 @@ docker run \
   --workdir /data \
   --env-file=.env.prod \
   --env-file=.env.secrets \
-  -it \
+  --net mqtt-network \
+  -itd \
   raspberrypiLocal-lightController-img \
   /bin/bash -c "sh run.sh"
