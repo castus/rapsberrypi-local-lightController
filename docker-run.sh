@@ -3,12 +3,12 @@
 docker run \
   --rm \
   --name raspberrypiLocal-lightController \
-  -p 8080:8080 \
   -v "$(pwd)"/src:/data \
   --workdir /data \
-  --env-file=.env.prod \
+  --env-file=.env \
+  --env-file=.env.dev \
   --env-file=.env.secrets \
   --net mqtt-network \
   -itd \
-  raspberrypiLocal-lightController-img \
+  c4stus/raspberrypi:lightcontroller \
   /bin/bash -c "sh run.sh"
