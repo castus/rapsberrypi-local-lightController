@@ -1,4 +1,3 @@
 #!/bin/bash
 
-sh docker-build.sh
-docker push c4stus/raspberrypi:lightcontroller
+docker buildx build --push --platform linux/arm/v7 -t c4stus/raspberrypi:lightcontroller .

@@ -39,10 +39,10 @@ func (m *AlexaTrigger) Trigger(key string) {
 		key)
 
 	if os.Getenv("SHOULD_TRIGGER_ALEXA") == "false" {
-		fmt.Printf("Alexa trigger not send to URL: %s", URL)
+		fmt.Printf("Alexa trigger not send to URL: %s\n", URL)
 		return
 	} else {
-		fmt.Printf("Alexa trigger send to URL: %s", URL)
+		fmt.Printf("Alexa trigger send to URL: %s\n", URL)
 	}
 
 	resp, err := http.Get(URL)
@@ -52,6 +52,8 @@ func (m *AlexaTrigger) Trigger(key string) {
 		panic("Monkey trigger request Failed")
 	}
 	defer resp.Body.Close()
+
+	fmt.Println("Monkey trigger request Success")
 	if err != nil {
 		fmt.Printf("Reading body failed: %s", err)
 		panic("Reading Monkey trigger body failed")

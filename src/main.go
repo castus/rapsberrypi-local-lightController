@@ -17,7 +17,7 @@ import (
 const (
 	TOPIC     = "leds"
 	QOS       = 1
-	CLIENT_ID = "triggerApi"
+	CLIENT_ID = "lightController"
 )
 
 var SERVER_ADDRESS = os.Getenv("MQTT_SERVER_ADDRESS")
@@ -44,22 +44,22 @@ func main() {
 		fmt.Printf("UNEXPECTED MESSAGE: %s\n", msg)
 	}
 	opts.OnConnectionLost = func(cl mqtt.Client, err error) {
-		fmt.Println("connection lost")
+		fmt.Println("Connection lost")
 	}
 	opts.OnConnect = func(c mqtt.Client) {
-		fmt.Println("connection established")
+		fmt.Println("Connection established")
 		t := c.Subscribe(TOPIC, QOS, handle)
 		go func() {
 			_ = t.Wait() // Can also use '<-t.Done()' in releases > 1.2.0
 			if t.Error() != nil {
 				fmt.Printf("ERROR SUBSCRIBING: %s\n", t.Error())
 			} else {
-				fmt.Println("subscribed to: ", TOPIC)
+				fmt.Println("Subscribed to: ", TOPIC)
 			}
 		}()
 	}
 	opts.OnReconnecting = func(mqtt.Client, *mqtt.ClientOptions) {
-		fmt.Println("attempting to reconnect")
+		fmt.Println("Attempting to reconnect")
 	}
 
 	client := mqtt.NewClient(opts)
@@ -68,7 +68,8 @@ func main() {
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
-	fmt.Println("Connection is up")
+	fmt.Println("MQTT connection from Light Controller is up")
+	fmt.Println("Light Controller up an running ...")
 
 	// Messages will be delivered asynchronously, so we just need to wait for a signal to shut down
 	sig := make(chan os.Signal, 1)
@@ -89,6 +90,6 @@ func handle(_ mqtt.Client, msg mqtt.Message) {
 		return
 	}
 
-	fmt.Printf("received message: %s\n", msg.Payload())
+	fmt.Printf("Received message: %s\n", msg.Payload())
 	h.Handle(m)
 }
