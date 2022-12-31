@@ -16,7 +16,7 @@ func NewAlexaTrigger() *AlexaTrigger {
 
 func (m *AlexaTrigger) DebounceTrigger(input chan string) {
 	var item string
-	interval := time.Millisecond * 500
+	interval := time.Millisecond * 1500
 	timer := time.NewTimer(interval)
 	for {
 		select {
