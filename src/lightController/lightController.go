@@ -25,7 +25,7 @@ func GetTriggerKey() string {
 	var s = new(Response)
 	err2 := json.Unmarshal(body, &s)
 	if err2 != nil {
-		fmt.Println("Error reading response from Sun position API")
+		fmt.Println("Error reading response from Trigger API")
 		fmt.Println(err2)
 	}
 
