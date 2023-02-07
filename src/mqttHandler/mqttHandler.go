@@ -17,12 +17,16 @@ func NewHandler() *Handler {
 }
 
 func (h *Handler) Handle(m Message) {
+	var triggerKey string
 	if m.IsLightOn {
-		triggerKey := lightController.GetTriggerKey()
-		eventChan := make(chan string)
-		go h.alexaTrigger.DebounceTrigger(eventChan)
-		eventChan <- triggerKey
+		triggerKey = lightController.GetTriggerKey()
+	} else {
+		triggerKey = "trigger-off"
 	}
+
+	eventChan := make(chan string)
+	go h.alexaTrigger.DebounceTrigger(eventChan)
+	eventChan <- triggerKey
 }
 
 type Message struct {
