@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func GetTriggerKey() string {
+func GetTriggerKeyMatchingTimeOfADay() string {
 	URL := fmt.Sprintf("%s", os.Getenv("TRIGGER_API_SERVER_ADDRESS"))
 	resp, err := http.Get(URL)
 

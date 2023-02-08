@@ -9,6 +9,11 @@ type Handler struct {
 	alexaTrigger *alexaTrigger.AlexaTrigger
 }
 
+type Message struct {
+	IsLightOn bool
+	Place     string
+}
+
 func NewHandler() *Handler {
 	trigger := alexaTrigger.NewAlexaTrigger()
 	return &Handler{
@@ -17,19 +22,22 @@ func NewHandler() *Handler {
 }
 
 func (h *Handler) Handle(m Message) {
-	var triggerKey string
-	if m.IsLightOn {
-		triggerKey = lightController.GetTriggerKey()
-	} else {
-		triggerKey = "trigger-off"
-	}
+	h.sendOnOffTrigger(m)
+	h.sendTrigger(lightController.GetTriggerKeyMatchingTimeOfADay())
+}
 
+func (h *Handler) sendTrigger(triggerKey string) {
 	eventChan := make(chan string)
 	go h.alexaTrigger.DebounceTrigger(eventChan)
 	eventChan <- triggerKey
 }
 
-type Message struct {
-	IsLightOn bool
-	Place     string
+func (h *Handler) sendOnOffTrigger(m Message) {
+	if m.Place == PlaceTrees.String() || m.Place == PlaceTV.String() {
+		if m.IsLightOn {
+			h.sendTrigger("trigger-on")
+		} else {
+			h.sendTrigger("trigger-off")
+		}
+	}
 }
