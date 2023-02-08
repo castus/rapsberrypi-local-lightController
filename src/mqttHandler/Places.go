@@ -3,7 +3,7 @@ package mqttHandler
 type Places int
 
 const (
-	PlaceHall Places = iota
+	PlaceHall Places = iota + 1
 	PlaceTrees
 	PlaceTV
 	PlaceCron // Virtual place used for a cron trigger app
