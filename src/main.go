@@ -41,25 +41,25 @@ func main() {
 	opts.ConnectRetry = true
 	opts.AutoReconnect = true
 	opts.DefaultPublishHandler = func(_ mqtt.Client, msg mqtt.Message) {
-		fmt.Printf("UNEXPECTED MESSAGE: %s\n", msg)
+		fmt.Printf("type=debug tag=mqtt msg=\"UNEXPECTED MESSAGE: %s\"\n", msg)
 	}
 	opts.OnConnectionLost = func(cl mqtt.Client, err error) {
-		fmt.Println("Connection lost")
+		fmt.Println("type=debug tag=mqtt msg=\"connection lost\"")
 	}
 	opts.OnConnect = func(c mqtt.Client) {
-		fmt.Println("Connection established")
+		fmt.Println("type=debug tag=mqtt msg=\"connection established\"")
 		t := c.Subscribe(TOPIC, QOS, handle)
 		go func() {
 			_ = t.Wait() // Can also use '<-t.Done()' in releases > 1.2.0
 			if t.Error() != nil {
-				fmt.Printf("ERROR SUBSCRIBING: %s\n", t.Error())
+				fmt.Printf("type=error msg=\"ERROR SUBSCRIBING: %s\"\n", t.Error())
 			} else {
-				fmt.Println("Subscribed to: ", TOPIC)
+				fmt.Printf("type=debug msg=\"Subscribed to: %s\"\n", TOPIC)
 			}
 		}()
 	}
 	opts.OnReconnecting = func(mqtt.Client, *mqtt.ClientOptions) {
-		fmt.Println("Attempting to reconnect")
+		fmt.Println("type=debug tag=mqtt msg=\"attempting to reconnect\"")
 	}
 
 	client := mqtt.NewClient(opts)
@@ -68,8 +68,7 @@ func main() {
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
-	fmt.Println("MQTT connection from Light Controller is up")
-	fmt.Println("Light Controller up an running ...")
+	log.Println("type=success msg=\"Light Controller up an running\"")
 
 	// Messages will be delivered asynchronously, so we just need to wait for a signal to shut down
 	sig := make(chan os.Signal, 1)

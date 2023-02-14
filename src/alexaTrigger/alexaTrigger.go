@@ -16,16 +16,16 @@ func NewAlexaTrigger() *AlexaTrigger {
 
 func (m *AlexaTrigger) DebounceTrigger(input chan string) {
 	var item string
-	interval := time.Millisecond * 1500
+	interval := time.Millisecond * 5000
 	timer := time.NewTimer(interval)
 	for {
 		select {
 		case item = <-input:
 			timer.Reset(interval)
-			fmt.Println("Trigger debounced")
+			fmt.Println("type=debug msg=\"Trigger debounced\"")
 		case <-timer.C:
 			if item != "" {
-				fmt.Println("Trigger run")
+				fmt.Println("type=debug msg=\"Trigger run\"")
 				m.Trigger(item)
 			}
 		}
@@ -53,9 +53,9 @@ func (m *AlexaTrigger) Trigger(key string) {
 	}
 	defer resp.Body.Close()
 
-	fmt.Println("Monkey trigger request Success")
+	fmt.Printf("type=success current-trigger=%s msg=\"Monkey trigger request Success\"\n", key)
 	if err != nil {
-		fmt.Printf("Reading body failed: %s", err)
+		fmt.Printf("type=error msg=\"Reading body failed: %s\"\n", err)
 		panic("Reading Monkey trigger body failed")
 	}
 }
