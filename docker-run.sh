@@ -1,7 +1,6 @@
 #!/bin/bash
 
 docker run \
-  --rm \
   --name raspberrypiLocal-lightController \
   --env-file=.env \
   --env-file=.env.dev \
