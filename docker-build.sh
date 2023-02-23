@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t c4stus/raspberrypi:lightcontroller .
+docker buildx build -t c4stus/raspberrypi:lightcontroller .
