@@ -1,12 +1,13 @@
 FROM --platform=$BUILDPLATFORM golang:1.20 AS builder
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
-RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM"
+ARG TARGETARCH
+RUN echo "I am running on $BUILDPLATFORM, building for platform $TARGETPLATFORM, target arch $TARGETARCH"
 
 WORKDIR /data
 COPY ./src /data
 RUN sh go-init.sh
-RUN go build -o light-controller
+RUN GOOS=linux GOARCH=$TARGETARCH go build -o light-controller
 
 FROM --platform=$BUILDPLATFORM ubuntu:kinetic
 ARG TARGETPLATFORM
