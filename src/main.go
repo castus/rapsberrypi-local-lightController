@@ -84,13 +84,14 @@ func main() {
 func handle(_ mqtt.Client, msg mqtt.Message) {
 	var m mqttHandler.Message
 
+	// Log ping from pico
 	if string(msg.Payload()) == "pico ping" {
-		fmt.Printf("type=debug tag=mqtt pico-ping=true\n")
+		fmt.Printf("type=debug tag=mqtt picoping=true\n")
 		return
 	}
 
-	err := json.Unmarshal(msg.Payload(), &m)
 	// React only on messages with valid JSON payload
+	err := json.Unmarshal(msg.Payload(), &m)
 	if err != nil {
 		return
 	}
