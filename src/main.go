@@ -89,6 +89,6 @@ func handle(_ mqtt.Client, msg mqtt.Message) {
 		return
 	}
 
-	fmt.Printf("Received message: %s\n", msg.Payload())
+	fmt.Printf("type=debug tag=mqtt action=receive-message msg='Received message: %s'\n", msg.Payload())
 	h.Handle(m)
 }
